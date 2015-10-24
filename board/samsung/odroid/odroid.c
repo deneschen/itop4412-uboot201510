@@ -97,7 +97,7 @@ char *get_dfu_alt_boot(char *interface, char *devstr)
 	return alt_boot;
 }
 #endif
-
+#if 0
 static void board_clock_init(void)
 {
 	unsigned int set, clr, clr_src_cpu, clr_pll_con0, clr_src_dmc;
@@ -364,7 +364,7 @@ static void board_clock_init(void)
 
 	return;
 }
-
+#endif
 static void board_gpio_init(void)
 {
 	/* eMMC Reset Pin */
@@ -414,8 +414,9 @@ static void board_gpio_init(void)
 
 int exynos_early_init_f(void)
 {
+#if 0
 	board_clock_init();
-
+#endif
 	return 0;
 }
 

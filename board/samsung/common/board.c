@@ -120,39 +120,19 @@ void dram_init_banksize(void)
 	}
 }
 
-static int board_uart_init(void)
-{
-	int err, uart_id, ret = 0;
-
-	for (uart_id = PERIPH_ID_UART0; uart_id <= PERIPH_ID_UART3; uart_id++) {
-		err = exynos_pinmux_config(uart_id, PINMUX_FLAG_NONE);
-		if (err) {
-			debug("UART%d not configured\n",
-			      (uart_id - PERIPH_ID_UART0));
-			ret |= err;
-		}
-	}
-	return ret;
-}
-
 #ifdef CONFIG_BOARD_EARLY_INIT_F
 int board_early_init_f(void)
 {
-	int err;
 #ifdef CONFIG_BOARD_TYPES
 	set_board_type();
 #endif
-	err = board_uart_init();
-	if (err) {
-		debug("UART init failed\n");
-		return err;
-	}
 
 #ifdef CONFIG_SYS_I2C_INIT_BOARD
 	board_i2c_init(gd->fdt_blob);
 #endif
 
 #if defined(CONFIG_EXYNOS_FB)
+	int err;
 	/*
 	 * board_init_f(arch/arm/lib/board.c) calls lcd_setmem() which needs
 	 * panel_info.vl_col, panel_info.vl_row and panel_info.vl_bpix,

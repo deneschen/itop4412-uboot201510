@@ -61,28 +61,16 @@ static const int udivslot[] = {
 
 static void __maybe_unused s5p_serial_init(struct s5p_uart *uart)
 {
-	/* enable FIFOs, auto clear Rx FIFO */
-	writel(0x3, &uart->ufcon);
-	writel(0, &uart->umcon);
-	/* 8N1 */
 	writel(0x3, &uart->ulcon);
-	/* No interrupts, no DMA, pure polling */
-	writel(0x245, &uart->ucon);
+	writel(0x5, &uart->ucon);
+	writel((7 << 8) | (1 << 2) | (1 << 0), &uart->ufcon);
 }
 
 static void __maybe_unused s5p_serial_baud(struct s5p_uart *uart, uint uclk,
 					   int baudrate)
 {
-	u32 val;
-
-	val = uclk / baudrate;
-
-	writel(val / 16 - 1, &uart->ubrdiv);
-
-	if (s5p_uart_divslot())
-		writew(udivslot[val % 16], &uart->rest.slot);
-	else
-		writeb(val % 16, &uart->rest.value);
+	writel(30, &uart->ubrdiv);
+	writeb(0 , &uart->rest.value);
 }
 
 #ifndef CONFIG_SPL_BUILD
@@ -209,8 +197,20 @@ U_BOOT_DRIVER(serial_s5p) = {
 
 void debug_uart_init(void)
 {
+#define CLK_SRC_PERIL0 			(0x10030000 + 0xC250)
+#define CLK_SRC_MASK_PERIL0 	(0x10030000 + 0xC350)
+#define CLK_DIV_PERIL0 			(0x10030000 + 0xC550)
+#define CLK_DIV_STAT_PERIL0 	(0x10030000 + 0xC650)
 	struct s5p_uart *uart = (struct s5p_uart *)CONFIG_DEBUG_UART_BASE;
 
+	/* clock for uart init */
+	writel((readl(CLK_SRC_PERIL0) & ~(0xF << 8)) | (0x6 << 8), CLK_SRC_PERIL0);
+	writel(readl(CLK_SRC_MASK_PERIL0) | (1 << 8), CLK_SRC_MASK_PERIL0);
+	writel((readl(CLK_DIV_PERIL0) & ~(0xF << 8)) | (13 << 8), CLK_DIV_PERIL0);
+
+	while(readl(CLK_DIV_STAT_PERIL0) & (1 << 8));
+
+	writel(0x2 << 0 | 0x2 << 4, (0x11400000 + 0x0020));
 	s5p_serial_init(uart);
 	s5p_serial_baud(uart, CONFIG_DEBUG_UART_CLOCK, CONFIG_BAUDRATE);
 }

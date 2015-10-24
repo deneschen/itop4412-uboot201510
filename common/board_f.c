@@ -25,6 +25,10 @@
 #include <logbuff.h>
 #include <malloc.h>
 #include <mapmem.h>
+#ifdef CONFIG_DEBUG_UART
+#include <mach/pinmux.h>
+#include <debug_uart.h>
+#endif
 
 /* TODO: Can we move these into arch/ headers? */
 #ifdef CONFIG_8xx
@@ -979,6 +983,11 @@ void board_init_f(ulong boot_flags)
 
 	gd->flags = boot_flags;
 	gd->have_console = 0;
+
+#ifdef CONFIG_DEBUG_UART
+		//exynos_pinmux_config(PERIPH_ID_UART2, PINMUX_FLAG_NONE);
+		debug_uart_init();
+#endif
 
 	if (initcall_run_list(init_sequence_f))
 		hang();
