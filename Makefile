@@ -1605,3 +1605,8 @@ FORCE:
 # Declare the contents of the .PHONY variable as phony.  We keep that
 # information in a variable so we can use it in if_changed and friends.
 .PHONY: $(PHONY)
+flash:
+	mk4412 u-boot.bin
+	sudo mkfs.vfat -F 32 -I /dev/sdc
+	sudo dd if=/dev/zero of=/dev/sdc bs=512 seek=1 iflag=dsync oflag=dsync count=2048
+	sudo dd if=./u-boot.bin of=/dev/sdc bs=512 seek=1 iflag=dsync oflag=dsync

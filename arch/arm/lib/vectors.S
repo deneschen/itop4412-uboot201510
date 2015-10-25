@@ -44,7 +44,10 @@
  *
  *************************************************************************
  */
-
+.word 0x0
+.word 0x0
+.word 0x0
+.word 0x0
 _start:
 
 #ifdef CONFIG_SYS_DV_NOR_BOOT_CFG
