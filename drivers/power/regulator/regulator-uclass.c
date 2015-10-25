@@ -163,7 +163,8 @@ static void regulator_show(struct udevice *dev, int ret)
 	struct dm_regulator_uclass_platdata *uc_pdata;
 
 	uc_pdata = dev_get_uclass_platdata(dev);
-
+	if (uc_pdata == NULL)
+		return;
 	printf("%s@%s: ", dev->name, uc_pdata->name);
 	if (uc_pdata->flags & REGULATOR_FLAG_AUTOSET_UV)
 		printf("set %d uV", uc_pdata->min_uV);
