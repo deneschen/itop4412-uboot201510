@@ -42,6 +42,7 @@ static const char *mmc_regulators[] = {
 
 void set_board_type(void)
 {
+#if 0
 	/* Set GPA1 pin 1 to HI - enable XCL205 output */
 	writel(XCL205_EN_GPIO_CON_CFG, XCL205_EN_GPIO_CON);
 	writel(XCL205_EN_GPIO_DAT_CFG, XCL205_EN_GPIO_CON + 0x4);
@@ -59,7 +60,8 @@ void set_board_type(void)
 	if (readl(XCL205_STATE_GPIO_DAT) & (1 << XCL205_STATE_GPIO_PIN))
 		gd->board_type = ODROID_TYPE_X2;
 	else
-		gd->board_type = ODROID_TYPE_U3;
+#endif
+	gd->board_type = ODROID_TYPE_U3;
 }
 
 const char *get_board_type(void)
@@ -367,6 +369,7 @@ static void board_clock_init(void)
 #endif
 static void board_gpio_init(void)
 {
+#if 0
 	/* eMMC Reset Pin */
 	gpio_request(EXYNOS4X12_GPIO_K12, "eMMC Reset");
 
@@ -399,7 +402,7 @@ static void board_gpio_init(void)
 	gpio_request(EXYNOS4X12_GPIO_C10, "Blue LED");
 
 	gpio_direction_output(EXYNOS4X12_GPIO_C10, 0);
-
+#endif
 #ifdef CONFIG_CMD_USB
 	/* USB3503A Reference frequency */
 	gpio_request(EXYNOS4X12_GPIO_X30, "USB3503A RefFreq");
@@ -417,6 +420,7 @@ int exynos_early_init_f(void)
 #if 0
 	board_clock_init();
 #endif
+	printf("chenjun debug exynos_early_init_f\n");
 	return 0;
 }
 

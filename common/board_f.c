@@ -947,15 +947,17 @@ static init_fnc_t init_sequence_f[] = {
 	setup_board_extra,
 #endif
 	INIT_FUNC_WATCHDOG_RESET
+#if 0
 	reloc_fdt,
 	setup_reloc,
+#endif
 #if defined(CONFIG_X86) || defined(CONFIG_ARC)
 	copy_uboot_to_ram,
 	clear_bss,
 	do_elf_reloc_fixups,
 #endif
 #if !defined(CONFIG_ARM) && !defined(CONFIG_SANDBOX)
-	jump_to_copy,
+	//jump_to_copy,
 #endif
 	NULL,
 };

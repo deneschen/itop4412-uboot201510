@@ -107,6 +107,7 @@ clr_gd:
 	str	sp, [r9, #GD_MALLOC_BASE]
 #endif
 	/* mov r0, #0 not needed due to above code */
+	ldr lr, =c_run
 	ldr pc, =board_init_f
 
 #if ! defined(CONFIG_SPL_BUILD)
@@ -144,7 +145,7 @@ here:
 	bl	relocate_vectors
 
 /* Set up final (full) environment */
-
+c_run:
 	bl	c_runtime_cpu_setup	/* we still call old routine here */
 #endif
 #if !defined(CONFIG_SPL_BUILD) || defined(CONFIG_SPL_FRAMEWORK)
