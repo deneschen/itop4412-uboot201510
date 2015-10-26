@@ -9,7 +9,6 @@ extra-y	:= start.o
 extra-y += sys_clk_init.o
 extra-y += mem_init.o
 extra-y += movi.o
-extra-y += debug_uart.o
 
 obj-y	+= cache_v7.o
 

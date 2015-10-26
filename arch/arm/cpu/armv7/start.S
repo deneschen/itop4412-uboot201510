@@ -76,7 +76,6 @@ reset:
 #endif
 	bl sys_clk_init
 	bl mem_init
-	bl dbg_uart_init
 mmcsd_boot:
 	ldr sp, =(CONFIG_SYS_TEXT_BASE)
 	bl movi_uboot_copy

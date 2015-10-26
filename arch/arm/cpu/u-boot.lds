@@ -25,7 +25,6 @@ SECTIONS
 		CPUDIR/sys_clk_init.o (.text*)
 		CPUDIR/mem_init.o (.text*)
 		CPUDIR/movi.o (.text*)
-		CPUDIR/debug_uart.o (.text*)
 		*(.text*)
 	}
 
